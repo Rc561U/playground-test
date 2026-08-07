@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Enum\AuthOperationType;
 use App\Enum\AuthStatus;
-use App\Form\LoginFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\AuthLogRepository;
 use App\Repository\UserRepository;
@@ -37,12 +36,9 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_logs');
         }
 
-        $form = $this->createForm(LoginFormType::class);
-
         return $this->render('security/login.html.twig', [
             'last_username' => $authenticationUtils->getLastUsername(),
             'error' => $authenticationUtils->getLastAuthenticationError(),
-            'login_form' => $form,
         ]);
     }
 
@@ -70,7 +66,7 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($userRepository->findOneBy(['email' => $user->getEmail()]) !== null) {
-                $message = 'Пользователь с таким email уже существует.';
+                $message = 'validation.user.exists';
                 $authLogService->log(
                     AuthOperationType::Register,
                     AuthStatus::Error,
@@ -98,7 +94,7 @@ class SecurityController extends AbstractController
                 $request,
             );
 
-            $this->addFlash('success', 'Регистрация успешна. Теперь вы можете войти.');
+            $this->addFlash('success', 'security.register.success');
 
             return $this->redirectToRoute('app_login');
         }

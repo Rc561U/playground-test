@@ -17,11 +17,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'security.register.email',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'user@example.com'],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Email обязателен.'),
-                    new Assert\Email(message: 'Некорректный email.'),
+                    new Assert\NotBlank(message: 'validation.email.required'),
+                    new Assert\Email(message: 'validation.email.invalid'),
                     new Assert\Length(max: 254),
                 ],
             ])
@@ -29,23 +29,23 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'first_options' => [
-                    'label' => 'Пароль',
+                    'label' => 'security.register.password',
                     'attr' => ['class' => 'form-control', 'autocomplete' => 'new-password'],
                     'constraints' => [
-                        new Assert\NotBlank(message: 'Пароль обязателен.'),
+                        new Assert\NotBlank(message: 'validation.password.required'),
                         new Assert\Length(
                             min: 6,
                             max: 32,
-                            minMessage: 'Пароль должен содержать минимум {{ limit }} символов.',
-                            maxMessage: 'Пароль не должен превышать {{ limit }} символов.',
+                            minMessage: 'validation.password.min_length',
+                            maxMessage: 'validation.password.max_length',
                         ),
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'Подтверждение пароля',
+                    'label' => 'security.register.confirm_password',
                     'attr' => ['class' => 'form-control', 'autocomplete' => 'new-password'],
                 ],
-                'invalid_message' => 'Пароли должны совпадать.',
+                'invalid_message' => 'security.register.passwords_mismatch',
             ]);
     }
 

@@ -15,19 +15,19 @@ class LoginFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'security.login.email',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'user@example.com'],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Email обязателен.'),
-                    new Assert\Email(message: 'Некорректный email.'),
+                    new Assert\NotBlank(message: 'validation.email.required'),
+                    new Assert\Email(message: 'validation.email.invalid'),
                 ],
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Пароль',
+                'label' => 'security.login.password',
                 'mapped' => false,
                 'attr' => ['class' => 'form-control', 'autocomplete' => 'current-password'],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Пароль обязателен.'),
+                    new Assert\NotBlank(message: 'validation.password.required'),
                 ],
             ]);
     }

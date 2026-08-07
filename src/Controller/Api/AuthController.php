@@ -50,7 +50,7 @@ class AuthController extends AbstractController
         }
 
         if ($userRepository->findOneBy(['email' => $dto->email]) !== null) {
-            $message = 'Пользователь с таким email уже существует.';
+            $message = 'validation.user.exists';
             $authLogService->log(
                 AuthOperationType::Register,
                 AuthStatus::Error,
@@ -77,7 +77,7 @@ class AuthController extends AbstractController
         );
 
         return $this->json([
-            'message' => 'Регистрация успешна.',
+            'message' => 'security.register.success',
             'user' => [
                 'id' => $user->getId(),
                 'email' => $user->getEmail(),

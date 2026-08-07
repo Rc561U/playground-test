@@ -13,11 +13,11 @@
         <div class="navbar-nav ms-auto">
             {% if app.user %}
                 <span class="nav-link text-white-50">{{ app.user.userIdentifier }}</span>
-                <a class="nav-link" href="{{ path('app_logs') }}">Логи</a>
-                <a class="nav-link" href="{{ path('app_logout') }}">Выход</a>
+                <a class="nav-link" href="{{ path('app_logs') }}">{{ 'nav.logs'|trans }}</a>
+                <a class="nav-link" href="{{ path('app_logout') }}">{{ 'nav.logout'|trans }}</a>
             {% else %}
-                <a class="nav-link" href="{{ path('app_login') }}">Вход</a>
-                <a class="nav-link" href="{{ path('app_register') }}">Регистрация</a>
+                <a class="nav-link" href="{{ path('app_login') }}">{{ 'nav.login'|trans }}</a>
+                <a class="nav-link" href="{{ path('app_register') }}">{{ 'nav.register'|trans }}</a>
             {% endif %}
         </div>
     </div>
@@ -27,7 +27,7 @@
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                {{ message }}
+                {{ message|trans }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         {% endfor %}

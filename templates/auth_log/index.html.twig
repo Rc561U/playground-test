@@ -1,57 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Логи авторизации{% endblock %}
+{% block title %}{{ 'logs.title'|trans }}{% endblock %}
 
 {% block body %}
-<h1 class="h3 mb-4">Логи авторизации и регистрации</h1>
+<h1 class="h3 mb-4">{{ 'logs.heading'|trans }}</h1>
 
 <div class="card mb-4">
-    <div class="card-header">Фильтры</div>
+    <div class="card-header">{{ 'logs.filter'|trans }}</div>
     <div class="card-body">
         <form method="get" class="row g-3">
             <div class="col-md-2">
-                <label class="form-label">Операция</label>
+                <label class="form-label">{{ 'logs.operation_type'|trans }}</label>
                 <select name="operation_type" class="form-select">
-                    <option value="">Все</option>
-                    <option value="login" {% if filters.operation_type == 'login' %}selected{% endif %}>login</option>
-                    <option value="register" {% if filters.operation_type == 'register' %}selected{% endif %}>register</option>
+                    <option value="">{{ 'logs.all'|trans }}</option>
+                    <option value="login" {% if filters.operation_type == 'login' %}selected{% endif %}>{{ 'logs.operation.login'|trans }}</option>
+                    <option value="register" {% if filters.operation_type == 'register' %}selected{% endif %}>{{ 'logs.operation.register'|trans }}</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Статус</label>
+                <label class="form-label">{{ 'logs.status'|trans }}</label>
                 <select name="status" class="form-select">
-                    <option value="">Все</option>
-                    <option value="success" {% if filters.status == 'success' %}selected{% endif %}>success</option>
-                    <option value="error" {% if filters.status == 'error' %}selected{% endif %}>error</option>
+                    <option value="">{{ 'logs.all'|trans }}</option>
+                    <option value="success" {% if filters.status == 'success' %}selected{% endif %}>{{ 'logs.status.success'|trans }}</option>
+                    <option value="error" {% if filters.status == 'error' %}selected{% endif %}>{{ 'logs.status.error'|trans }}</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">User ID</label>
+                <label class="form-label">{{ 'logs.user_id'|trans }}</label>
                 <input type="number" name="user_id" value="{{ filters.user_id }}" class="form-control">
             </div>
             <div class="col-md-2">
-                <label class="form-label">IP</label>
+                <label class="form-label">{{ 'logs.ip'|trans }}</label>
                 <input type="text" name="ip" value="{{ filters.ip }}" class="form-control">
             </div>
             <div class="col-md-4">
-                <label class="form-label">User-Agent</label>
+                <label class="form-label">{{ 'logs.user_agent'|trans }}</label>
                 <input type="text" name="user_agent" value="{{ filters.user_agent }}" class="form-control">
             </div>
             <div class="col-md-2">
-                <label class="form-label">Дата от</label>
+                <label class="form-label">{{ 'logs.created_at'|trans }} {{ 'form.from'|trans }}</label>
                 <input type="date" name="created_at_from" value="{{ filters.created_at_from }}" class="form-control">
             </div>
             <div class="col-md-2">
-                <label class="form-label">Дата до</label>
+                <label class="form-label">{{ 'logs.created_at'|trans }} {{ 'form.to'|trans }}</label>
                 <input type="date" name="created_at_to" value="{{ filters.created_at_to }}" class="form-control">
             </div>
             <div class="col-md-2">
-                <label class="form-label">На странице</label>
+                <label class="form-label">{{ 'form.per_page'|trans }}</label>
                 <input type="number" name="limit" value="{{ pagination.limit }}" min="1" max="100" class="form-control">
             </div>
             <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Применить</button>
-                <a href="{{ path('app_logs') }}" class="btn btn-outline-secondary">Сбросить</a>
+                <button type="submit" class="btn btn-primary">{{ 'form.apply'|trans }}</button>
+                <a href="{{ path('app_logs') }}" class="btn btn-outline-secondary">{{ 'logs.clear_filter'|trans }}</a>
             </div>
         </form>
     </div>
@@ -62,13 +62,13 @@
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>Операция</th>
-                <th>Статус</th>
-                <th>User ID</th>
-                <th>IP</th>
-                <th>User-Agent</th>
-                <th>Ошибка</th>
-                <th>Время</th>
+                <th>{{ 'logs.operation_type'|trans }}</th>
+                <th>{{ 'logs.status'|trans }}</th>
+                <th>{{ 'logs.user_id'|trans }}</th>
+                <th>{{ 'logs.ip'|trans }}</th>
+                <th>{{ 'logs.user_agent'|trans }}</th>
+                <th>{{ 'logs.error_message'|trans }}</th>
+                <th>{{ 'logs.created_at'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -78,7 +78,7 @@
                     <td><span class="badge bg-secondary">{{ log.operationType.value }}</span></td>
                     <td>
                         <span class="badge bg-{{ log.status.value == 'success' ? 'success' : 'danger' }}">
-                            {{ log.status.value }}
+                            {{ log.status.value == 'success' ? 'logs.status.success'|trans : 'logs.status.error'|trans }}
                         </span>
                     </td>
                     <td>{{ log.user ? log.user.id : '—' }}</td>
@@ -89,7 +89,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="8" class="text-center text-muted py-4">Записи не найдены</td>
+                    <td colspan="8" class="text-center text-muted py-4">{{ 'logs.no_logs'|trans }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -99,13 +99,13 @@
 <nav aria-label="Pagination">
     <ul class="pagination justify-content-center">
         <li class="page-item {% if pagination.page <= 1 %}disabled{% endif %}">
-            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page - 1, 'limit': pagination.limit})) }}">Назад</a>
+            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page - 1, 'limit': pagination.limit})) }}">{{ 'form.previous'|trans }}</a>
         </li>
         <li class="page-item disabled">
-            <span class="page-link">Страница {{ pagination.page }} из {{ pagination.pages }} (всего {{ pagination.total }})</span>
+            <span class="page-link">{{ 'logs.pagination.page'|trans }} {{ pagination.page }} {{ 'logs.pagination.of'|trans }} {{ pagination.pages }} ({{ 'logs.pagination.total'|trans }} {{ pagination.total }})</span>
         </li>
         <li class="page-item {% if pagination.page >= pagination.pages %}disabled{% endif %}">
-            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page + 1, 'limit': pagination.limit})) }}">Вперёд</a>
+            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page + 1, 'limit': pagination.limit})) }}">{{ 'form.next'|trans }}</a>
         </li>
     </ul>
 </nav>

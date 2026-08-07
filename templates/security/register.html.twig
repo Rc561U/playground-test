@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Регистрация{% endblock %}
+{% block title %}{{ 'security.register.title'|trans }}{% endblock %}
 
 {% block body %}
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="card shadow-sm">
             <div class="card-body p-4">
-                <h1 class="h3 mb-4 text-center">Регистрация</h1>
+                <h1 class="h3 mb-4 text-center">{{ 'security.register.heading'|trans }}</h1>
 
                 {{ form_start(registration_form) }}
                     <div class="mb-3">
@@ -25,11 +25,11 @@
                         {{ form_widget(registration_form.plainPassword.second) }}
                         {{ form_errors(registration_form.plainPassword.second) }}
                     </div>
-                    <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+                    <button type="submit" class="btn btn-success w-100">{{ 'security.register.submit'|trans }}</button>
                 {{ form_end(registration_form) }}
 
                 <p class="text-center mt-3 mb-0">
-                    Уже есть аккаунт? <a href="{{ path('app_login') }}">Войти</a>
+                    {{ 'security.register.has_account'|trans }} <a href="{{ path('app_login') }}">{{ 'security.register.login_link'|trans }}</a>
                 </p>
             </div>
         </div>
