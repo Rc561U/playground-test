@@ -8,12 +8,18 @@ use App\Enum\AuthOperationType;
 use App\Enum\AuthStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
-class AuthLogService
+class AuthLogService implements ServiceSubscriberInterface
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+    use ServiceSubscriberTrait;
+
+    public static function getSubscribedServices(): array
+    {
+        return [
+            EntityManagerInterface::class,
+        ];
     }
 
     public function log(
@@ -31,7 +37,7 @@ class AuthLogService
             ->setUserAgent($request->headers->get('User-Agent'))
             ->setErrorMessage($errorMessage);
 
-        $this->entityManager->persist($authLog);
-        $this->entityManager->flush();
+        $this->container->get(EntityManagerInterface::class)->persist($authLog);
+        $this->container->get(EntityManagerInterface::class)->flush();
     }
 }

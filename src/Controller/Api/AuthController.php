@@ -88,7 +88,6 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'api_login', methods: ['POST'])]
     public function login(): JsonResponse
     {
-        // Обрабатывается json_login authenticator в security.yaml
         throw new \LogicException('This method should not be reached.');
     }
 }
