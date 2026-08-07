@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Логи авторизации{% endblock %}
+
+{% block body %}
+<h1 class="h3 mb-4">Логи авторизации и регистрации</h1>
+
+<div class="card mb-4">
+    <div class="card-header">Фильтры</div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-2">
+                <label class="form-label">Операция</label>
+                <select name="operation_type" class="form-select">
+                    <option value="">Все</option>
+                    <option value="login" {% if filters.operation_type == 'login' %}selected{% endif %}>login</option>
+                    <option value="register" {% if filters.operation_type == 'register' %}selected{% endif %}>register</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Статус</label>
+                <select name="status" class="form-select">
+                    <option value="">Все</option>
+                    <option value="success" {% if filters.status == 'success' %}selected{% endif %}>success</option>
+                    <option value="error" {% if filters.status == 'error' %}selected{% endif %}>error</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">User ID</label>
+                <input type="number" name="user_id" value="{{ filters.user_id }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">IP</label>
+                <input type="text" name="ip" value="{{ filters.ip }}" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">User-Agent</label>
+                <input type="text" name="user_agent" value="{{ filters.user_agent }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Дата от</label>
+                <input type="date" name="created_at_from" value="{{ filters.created_at_from }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Дата до</label>
+                <input type="date" name="created_at_to" value="{{ filters.created_at_to }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">На странице</label>
+                <input type="number" name="limit" value="{{ pagination.limit }}" min="1" max="100" class="form-control">
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Применить</button>
+                <a href="{{ path('app_logs') }}" class="btn btn-outline-secondary">Сбросить</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Операция</th>
+                <th>Статус</th>
+                <th>User ID</th>
+                <th>IP</th>
+                <th>User-Agent</th>
+                <th>Ошибка</th>
+                <th>Время</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td><span class="badge bg-secondary">{{ log.operationType.value }}</span></td>
+                    <td>
+                        <span class="badge bg-{{ log.status.value == 'success' ? 'success' : 'danger' }}">
+                            {{ log.status.value }}
+                        </span>
+                    </td>
+                    <td>{{ log.user ? log.user.id : '—' }}</td>
+                    <td>{{ log.ip ?? '—' }}</td>
+                    <td class="text-truncate" style="max-width: 200px;" title="{{ log.userAgent }}">{{ log.userAgent ?? '—' }}</td>
+                    <td class="text-truncate" style="max-width: 200px;" title="{{ log.errorMessage }}">{{ log.errorMessage ?? '—' }}</td>
+                    <td>{{ log.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Записи не найдены</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if pagination.page <= 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page - 1, 'limit': pagination.limit})) }}">Назад</a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Страница {{ pagination.page }} из {{ pagination.pages }} (всего {{ pagination.total }})</span>
+        </li>
+        <li class="page-item {% if pagination.page >= pagination.pages %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_logs', filters|merge({'page': pagination.page + 1, 'limit': pagination.limit})) }}">Вперёд</a>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
